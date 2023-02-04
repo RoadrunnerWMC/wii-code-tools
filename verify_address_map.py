@@ -709,7 +709,7 @@ def main(args: Optional[List[str]] = None) -> None:
     code_file_1 = load_code_file(parsed_args.code_file_1)
     code_file_2 = load_code_file(parsed_args.code_file_2)
     rels_1 = load_rels(parsed_args.rel_1)
-    rels_2 = load_rels(parsed_args.rel)
+    rels_2 = load_rels(parsed_args.rel_2)
 
     ignore_ranges = []
     if parsed_args.ignore_range is not None:
