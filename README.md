@@ -75,6 +75,12 @@ Scans a Wii memory dump (such as a `mem1.raw` from Dolphin Emulator) for a .rel 
 
 Uses an address map to map a single address from one version to another. This is probably the tool I've invoked the most times out of any of them.
 
+### port_symbol_map.py
+
+**Assumes NSMBW section names and executabilities**
+
+Uses an address map to port a symbol map from one game version to another, or to all other game versions at once.
+
 ### static_linker.py
 
 **Assumes NSMBW section names and executabilities**
