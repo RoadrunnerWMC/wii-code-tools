@@ -347,9 +347,11 @@ class IDASymbolMap_IDC(SymbolMap):
     EXTENSION = '.idc'
 
     symbols: list  # [(address, name, is_function), ...]
+    force_gcc3_demangling: bool
 
     def __init__(self):
         self.symbols = []
+        self.force_gcc3_demangling = False
 
 
     def to_symbol_dict(self) -> BasicSymbolMap:
@@ -390,6 +392,10 @@ class IDASymbolMap_IDC(SymbolMap):
         f.write('#include <idc.idc>\n')
         f.write('\n')
         f.write('static main(void) {\n')
+
+        if self.force_gcc3_demangling:
+            f.write('    // Force-enable "Options -> Demangled names... -> Assume GCC v3.x names" checkbox\n')
+            f.write('    set_inf_attr(INF_DEMNAMES, get_inf_attr(INF_DEMNAMES) | DEMNAM_GCC3)\n')
 
         for addr, name, is_function in self.symbols:
             if is_function:
