@@ -198,7 +198,7 @@ def remap_symbols_one_level_up(
 
 def remap_symbols_to_all_versions(
         map: lib_symbol_map_formats.BasicSymbolMap, start_mapper_name: str, mappers: lib_address_maps.AddressMap, tweaks: lib_tweaks.SymbolsTweakMap,
-        *, error_handling: PortingIssuesHandling = None) -> lib_symbol_map_formats.BasicSymbolMap:
+        *, error_handling: PortingIssuesHandling = None) -> Dict[str, lib_symbol_map_formats.BasicSymbolMap]:
     """
     Remap a symbol table dictionary to all other versions
     """
@@ -284,7 +284,7 @@ def main(args: Optional[List[str]] = None) -> None:
     parser.add_argument('tweaks', type=Path, nargs='?',
         help='"tweaks.txt" file for the symbol map')
 
-    parser.add_argument('--output_format', choices=sorted(lib_symbol_map_formats.FORMAT_CLASSES), default=DEFAULT_OUTPUT_FORMAT,
+    parser.add_argument('--output-format', choices=sorted(lib_symbol_map_formats.FORMAT_CLASSES), default=DEFAULT_OUTPUT_FORMAT,
         help=f'file format for output symbol maps (default: {DEFAULT_OUTPUT_FORMAT})')
     parser.add_argument('--output-pattern', default=DEFAULT_OUTPUT_PATTERN,
         help='filename pattern for output symbol maps.'
