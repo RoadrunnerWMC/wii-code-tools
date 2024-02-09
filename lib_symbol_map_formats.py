@@ -395,7 +395,7 @@ class IDASymbolMap_IDC(SymbolMap):
 
         if self.force_gcc3_demangling:
             f.write('    // Force-enable "Options -> Demangled names... -> Assume GCC v3.x names" checkbox\n')
-            f.write('    set_inf_attr(INF_DEMNAMES, get_inf_attr(INF_DEMNAMES) | DEMNAM_GCC3)\n')
+            f.write('    set_inf_attr(INF_DEMNAMES, get_inf_attr(INF_DEMNAMES) | DEMNAM_GCC3);\n\n')
 
         for addr, name, is_function in self.symbols:
             if is_function:

@@ -19,10 +19,11 @@ def auto_assign_alf_section_executability(alf: 'code_files.alf.ALF') -> None:
 
 
 def build_nsmbw_symbol_map(
-        map: Dict[int, str],
+        map: lib_symbol_map_formats.BasicSymbolMap,
         version: str,
         format: Union[str, Type[lib_symbol_map_formats.SymbolMap]],
-        *, add_kamek_linker_epilogue: bool = True) -> lib_symbol_map_formats.SymbolMap:
+        *, add_kamek_linker_epilogue: bool = True,
+        idc_force_gcc3_demangling: bool = True) -> lib_symbol_map_formats.SymbolMap:
     """
     Given a NSMBW symbol map initially in {addr: name} dict form, create
     a SymbolMap instance in the indicated format by filling in
@@ -55,24 +56,26 @@ def build_nsmbw_symbol_map(
 
     map_obj = map_cls.from_dict_and_sections_info(map, sections_info)
 
-    if format == 'linker' and add_kamek_linker_epilogue:
+    if isinstance(map_obj, lib_symbol_map_formats.LinkerScriptMap) and add_kamek_linker_epilogue:
         map_obj.epilogue = lib_symbol_map_formats.KAMEK_LINKER_SCRIPT_EPILOGUE
+
+    if isinstance(map_obj, lib_symbol_map_formats.IDASymbolMap_IDC) and idc_force_gcc3_demangling:
+        map_obj.force_gcc3_demangling = True
 
     return map_obj
 
 
 def save_nsmbw_symbol_map(
-        map: Dict[int, str],
+        map: lib_symbol_map_formats.BasicSymbolMap,
         version: str,
         format: Union[str, Type[lib_symbol_map_formats.SymbolMap]],
         path: 'pathlib.Path',
-        *, add_kamek_linker_epilogue: bool = True) -> None:
+        **kwargs) -> None:
     """
     Wrapper for build_nsmbw_symbol_map() that saves the map to a Path
     instead of returning it.
     """
-    map_obj = build_nsmbw_symbol_map(map, version, format,
-        add_kamek_linker_epilogue=add_kamek_linker_epilogue)
+    map_obj = build_nsmbw_symbol_map(map, version, format, **kwargs)
 
     with path.open('w', encoding='utf-8') as f:
         map_obj.write(f)
