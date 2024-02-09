@@ -88,7 +88,7 @@ def main(args: Optional[List[str]] = None) -> None:
     if new_address is None:
         print('The address could not be mapped.')
     else:
-        print(f'{new_address:08X}')
+        print(f'{new_address:08x}')
 
 
 if __name__ == '__main__':
