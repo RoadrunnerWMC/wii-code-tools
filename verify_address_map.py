@@ -3,14 +3,14 @@
 import argparse
 import functools
 from pathlib import Path
-from typing import Callable, Dict, Iterator, List, Optional, Tuple
+from typing import Callable, Iterator, List, Optional, Tuple
 
-import code_files
-import code_files.all
-import code_files.rel
-import common
-import lib_address_maps
-import lib_nsmbw
+from lib_wii_code_tools import code_files
+from lib_wii_code_tools.code_files import all as code_files_all
+from lib_wii_code_tools.code_files import rel as code_files_rel
+from lib_wii_code_tools import common
+from lib_wii_code_tools import address_maps as lib_address_maps
+from lib_wii_code_tools import nsmbw as lib_nsmbw
 
 # Zero fields and reserved fields should both be included in the masks:
 # "If a reserved field does not have all bits cleared, or if a field
@@ -414,8 +414,8 @@ def iter_addresses_from_sections(sections: List[code_files.CodeFileSection], *,
 def compare_opcodes_across_versions(
         code_file_1: code_files.CodeFile,
         code_file_2: code_files.CodeFile,
-        rels_1: List[code_files.rel.REL],
-        rels_2: List[code_files.rel.REL],
+        rels_1: List[code_files_rel.REL],
+        rels_2: List[code_files_rel.REL],
         mapper_1: lib_address_maps.AddressMapper,
         mapper_2: lib_address_maps.AddressMapper,
         *,
@@ -495,8 +495,8 @@ def compare_opcodes_across_versions(
 def compare_data_across_versions(
         code_file_1: code_files.CodeFile,
         code_file_2: code_files.CodeFile,
-        rels_1: List[code_files.rel.REL],
-        rels_2: List[code_files.rel.REL],
+        rels_1: List[code_files_rel.REL],
+        rels_2: List[code_files_rel.REL],
         mapper_1: lib_address_maps.AddressMapper,
         mapper_2: lib_address_maps.AddressMapper,
         *,
@@ -669,14 +669,14 @@ def main(args: Optional[List[str]] = None) -> None:
         mappers = lib_address_maps.load_address_map(f)
 
     def load_code_file(path: Path) -> code_files.CodeFile:
-        cf = code_files.all.load_by_extension(path.read_bytes(), path.suffix)
+        cf = code_files_all.load_by_extension(path.read_bytes(), path.suffix)
         if cf is not None:
             lib_nsmbw.auto_assign_alf_section_executability(cf)
             return cf
         else:
             print(f'Unknown file extension: {path.suffix}')
 
-    def load_rels(arg: List[Tuple[str, str]]) -> List[code_files.rel.REL]:
+    def load_rels(arg: List[Tuple[str, str]]) -> List[code_files_rel.REL]:
         if arg is None:
             return []
 
@@ -688,7 +688,7 @@ def main(args: Optional[List[str]] = None) -> None:
             rel_name = rel_fp.name.split('.')[0]
 
             with rel_fp.open('rb') as f:
-                rel = code_files.rel.REL.from_file(f)
+                rel = code_files_rel.REL.from_file(f)
             rels.append((rel_name, rel))
 
             addrs = [int(p, 16) for p in rel_addrs_str.split(',')]

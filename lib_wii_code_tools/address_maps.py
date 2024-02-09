@@ -3,7 +3,7 @@ import enum
 import re
 from typing import Dict, Iterator, List, Optional, TextIO, Tuple
 
-import common
+from . import common
 
 
 # Optional import (`pip install intervaltree`), makes address lookups faster

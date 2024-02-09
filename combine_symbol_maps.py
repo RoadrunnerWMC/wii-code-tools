@@ -4,8 +4,8 @@ import argparse
 from pathlib import Path
 from typing import List, Optional
 
-import lib_nsmbw
-import lib_symbol_map_formats
+from lib_wii_code_tools import nsmbw as lib_nsmbw
+from lib_wii_code_tools import symbol_map_formats as lib_symbol_map_formats
 
 
 def main(args: Optional[List[str]] = None) -> None:
@@ -16,8 +16,6 @@ def main(args: Optional[List[str]] = None) -> None:
         description='Combine symbol maps.'
         ' As a special case, this can also be used to convert a single symbol map between different formats.'
         ' If symbols conflict (same address), the name will be picked from the symbol map nearest the *end* of the command-line list.')
-
-    format_choices = list(sorted(lib_symbol_map_formats.FORMAT_CLASSES))
 
     parser.add_argument('input_map', type=Path, nargs='*',
         help='input symbol map file(s) (any supported format(s))')

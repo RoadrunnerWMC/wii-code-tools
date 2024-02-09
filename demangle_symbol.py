@@ -3,7 +3,7 @@
 import argparse
 from typing import List, Optional
 
-import lib_demangle
+from lib_wii_code_tools import demangle as lib_demangle
 
 
 def main(args: Optional[List[str]] = None) -> None:

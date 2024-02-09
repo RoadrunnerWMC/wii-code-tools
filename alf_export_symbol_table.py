@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 from typing import List, Optional
 
-import code_files.alf
+from lib_wii_code_tools.code_files import alf as code_files_alf
 
 
 def main(args: Optional[List[str]] = None) -> None:
@@ -18,7 +18,7 @@ def main(args: Optional[List[str]] = None) -> None:
 
     parsed_args = parser.parse_args(args)
 
-    alf = code_files.alf.ALF(parsed_args.alf_file.read_bytes())
+    alf = code_files_alf.ALF(parsed_args.alf_file.read_bytes())
 
     with parsed_args.output_file.open('w', encoding='utf-8') as f:
         for section in alf.sections:

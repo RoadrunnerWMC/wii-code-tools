@@ -8,7 +8,7 @@ import struct
 from pathlib import Path
 from typing import List, Optional
 
-import code_files.rel
+from lib_wii_code_tools.code_files import rel as code_files_rel
 
 
 def find_all(haystack: bytes, needle: bytes) -> List[int]:
@@ -23,7 +23,7 @@ def find_all(haystack: bytes, needle: bytes) -> List[int]:
     return L
 
 
-def find_section_address_in_memdump(section: code_files.rel.RELSection, memdump: bytes) -> Optional[int]:
+def find_section_address_in_memdump(section: code_files_rel.RELSection, memdump: bytes) -> Optional[int]:
     """
     Try to find the REL section in the memdump. Return None if it can't
     be found (this will happen quite often).
@@ -48,7 +48,7 @@ def find_section_address_in_memdump(section: code_files.rel.RELSection, memdump:
                 return memdump.find(snippet) - offs | 0x80000000
 
 
-def find_all_section_addresses_in_memdump(rel: code_files.rel.REL, memdump: bytes) -> List[int]:
+def find_all_section_addresses_in_memdump(rel: code_files_rel.REL, memdump: bytes) -> List[int]:
     """
     Return a list of the address of each REL section in the mem dump
     """
@@ -89,11 +89,11 @@ def find_all_section_addresses_in_memdump(rel: code_files.rel.REL, memdump: byte
         all_addrs.append(supposed_addr)
 
     # Sanitize and return
-    all_addrs = [code_files.rel.SEGMENT_OFF(a) for a in all_addrs]
+    all_addrs = [code_files_rel.SEGMENT_OFF(a) for a in all_addrs]
     return all_addrs
 
 
-def print_info(rel: code_files.rel.REL, memdump: bytes) -> None:
+def print_info(rel: code_files_rel.REL, memdump: bytes) -> None:
     """
     Print the REL section addresses to stdout nicely.
     """
@@ -130,7 +130,7 @@ def main(args: Optional[List[str]] = None) -> None:
     parsed_args = parser.parse_args(args)
 
     with parsed_args.rel_file.open('rb') as f:
-        rel = code_files.rel.REL.from_file(f)
+        rel = code_files_rel.REL.from_file(f)
 
     with parsed_args.memdump.open('rb') as f:
         memdump = f.read()

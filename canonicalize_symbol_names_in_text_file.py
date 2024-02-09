@@ -3,13 +3,13 @@
 import argparse
 from pathlib import Path
 import re
-from typing import Dict, List, Optional, TextIO, Tuple
+from typing import Dict, List, Optional
 
-import common
-import lib_address_maps
-import lib_demangle
-import lib_symbol_map_formats
-import lib_tweaks
+from lib_wii_code_tools import common
+from lib_wii_code_tools import address_maps as lib_address_maps
+from lib_wii_code_tools import demangle as lib_demangle
+from lib_wii_code_tools import symbol_map_formats as lib_symbol_map_formats
+from lib_wii_code_tools import tweaks as lib_tweaks
 
 
 

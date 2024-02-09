@@ -3,13 +3,12 @@
 import argparse
 from pathlib import Path
 import struct
-import sys
 from typing import BinaryIO, List, Optional, Tuple
 
-import code_files
-import code_files.all
-import code_files.rel
-import lib_nsmbw_constants
+from lib_wii_code_tools import code_files
+from lib_wii_code_tools.code_files import all as code_files_all
+from lib_wii_code_tools.code_files import rel as code_files_rel
+from lib_wii_code_tools import nsmbw_constants as lib_nsmbw_constants
 
 # TODO: get rid of this dependency probably
 import elftools.elf.enums as elf_enums  # pip install pyelftools
@@ -19,7 +18,7 @@ import elftools.elf.enums as elf_enums  # pip install pyelftools
 MEMDUMP_BASE = 0x80000000
 
 
-def calculate_relocation_write_value(reloc: code_files.rel.RELRelocation, write_addr: int, addr_to_write: int, initial_value_32: int) -> Tuple[bool, int, int]:
+def calculate_relocation_write_value(reloc: code_files_rel.RELRelocation, write_addr: int, addr_to_write: int, initial_value_32: int) -> Tuple[bool, int, int]:
     """
     Calculate the value and size to write to memory for the given
     relocation, given the target write address, the address to be
@@ -27,7 +26,7 @@ def calculate_relocation_write_value(reloc: code_files.rel.RELRelocation, write_
 
     Returns (should_write: bool, write_value: int, write_size: int).
     """
-    RELRT = code_files.rel.RELRelocationType
+    RELRT = code_files_rel.RELRelocationType
     NO_WRITE = (False, None, None)
 
     rel_addr_to_write = addr_to_write - write_addr
@@ -128,7 +127,7 @@ def calculate_relocation_write_value(reloc: code_files.rel.RELRelocation, write_
 
 
 def apply_all_relocations(
-        dol: code_files.CodeFile, rels: List[code_files.rel.REL],
+        dol: code_files.CodeFile, rels: List[code_files_rel.REL],
         *, memdump_file_for_verification: BinaryIO = None, dump_relocs: bool = False) -> None:
     """
     Apply all REL relocations, in-place
@@ -174,15 +173,15 @@ def apply_all_relocations(
                 write_pos += reloc.offset
 
                 # Handle meta relocation types first
-                if reloc.type == code_files.rel.RELRelocationType.R_DOLPHIN_NOP:
+                if reloc.type == code_files_rel.RELRelocationType.R_DOLPHIN_NOP:
                     continue
-                elif reloc.type == code_files.rel.RELRelocationType.R_DOLPHIN_SECTION:
+                elif reloc.type == code_files_rel.RELRelocationType.R_DOLPHIN_SECTION:
                     section_id = reloc.section
                     write_pos = 0
                     continue
-                elif reloc.type == code_files.rel.RELRelocationType.R_DOLPHIN_END:
+                elif reloc.type == code_files_rel.RELRelocationType.R_DOLPHIN_END:
                     break
-                elif reloc.type == code_files.rel.RELRelocationType.R_DOLPHIN_MRKREF:
+                elif reloc.type == code_files_rel.RELRelocationType.R_DOLPHIN_MRKREF:
                     print('WARNING: skipping R_DOLPHIN_MRKREF')
                     continue
 
@@ -447,7 +446,7 @@ def main(args: Optional[List[str]] = None) -> None:
         out_fp = parsed_args.output
 
     # Load dol
-    dol = code_files.all.load_by_extension(parsed_args.main_code_file.read_bytes(), parsed_args.main_code_file.suffix)
+    dol = code_files_all.load_by_extension(parsed_args.main_code_file.read_bytes(), parsed_args.main_code_file.suffix)
 
     # Load rels and parse and assign addresses for their sections
     if parsed_args.rel is not None:
@@ -458,7 +457,7 @@ def main(args: Optional[List[str]] = None) -> None:
             rel_name = rel_fp.name.split('.')[0]
 
             with rel_fp.open('rb') as f:
-                rel = code_files.rel.REL.from_file(f)
+                rel = code_files_rel.REL.from_file(f)
             rels.append((rel_name, rel))
 
             addrs = [int(p, 16) for p in rel_addrs_str.split(',')]

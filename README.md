@@ -1,10 +1,10 @@
 # Wii Code Tools
 
-This is a giant collection of interconnected Python tools and libraries I've developed while working on address and symbol maps for *New Super Mario Bros. Wii*. Much of it can probably be applied to other Wii (maybe also Gamecube) games as well.
+This is a giant collection of Python tools and libraries I've developed while working on address and symbol maps for *New Super Mario Bros. Wii*. Much of it can probably be applied to other Wii (maybe also GameCube) games as well.
 
-Some tools use hardcoded section name and/or executability information known to be correct for NSMBW. I think this is probably valid for most commercial Wii games, but I haven't checked. I've put a note in each tool that does this. I might try to de-hardcode some of these in the future, where possible.
+Some tools use hardcoded section name and/or executability information known to be correct for NSMBW. I think this is probably valid for most commercial Wii games, but I haven't checked. I've put a note below for each tool that does this. I might try to de-hardcode some of these in the future, where possible.
 
-This readme will explain what each tool is *for* rather than exactly how to use them. They all use argparse, so you can view command-line usage by running them with `-h`.
+This readme will explain what each tool and library is *for* rather than exactly how to use them. All of the tools use argparse, so you can view command-line usage by running them with `-h`.
 
 In alphabetical order:
 
@@ -61,11 +61,11 @@ This tool scans a text file for placeholder symbol names such as "`FUN_P1_802bb6
 
 **Assumes NSMBW section names and executabilities**
 
-This overlays one or more symbol maps on top of each other to produce a combined symbol map. It supports all input and output formats supported by `lib_symbol_map_formats.py`. By providing just one symbol map, you can use this to convert a symbol map from one format to another. The maps must all be for the same game version.
+This overlays one or more symbol maps on top of each other to produce a combined symbol map. It supports all input and output formats supported by `lib_wii_code_tools.symbol_map_formats`. By providing just one symbol map, you can use this to convert a symbol map from one format to another. The maps must all be for the same game version.
 
 ### demangle_symbol.py
 
-A frontend for `lib_demangle.py` which lets you demangle a symbol using either a working algorithm or a recreation of Nvidia's broken algorithm.
+A frontend for `lib_wii_code_tools.demangle` which lets you demangle a symbol using either a working algorithm or a recreation of Nvidia's broken algorithm.
 
 ### find_rel_in_mem_dump.py
 
@@ -95,13 +95,13 @@ Compares two game binaries through an address map and warns for any differences.
 
 For executable sections, only instruction opcodes are compared, not operands. For data sections, mismatching values that look like pointers are themselves checked against the address map, and no warning is produced if they're consistent with it. (Since forward references can be problematic when creating an address map in linear address-space order, there's an option to ignore *all* values that look like pointers, without checking them against the address map. This should be turned off once you reach the end of each DOL or REL.)
 
-## Libraries
+## `lib_wii_code_tools` Package
 
 ### code_files
 
-A package for loading DOL, REL and ALF files with a consistent interface.
+A sub-package for loading DOL, REL and ALF files with a consistent interface.
 
-### lib_address_maps.py
+### address_maps
 
 An implementation of the address-map text file format used in [Kamek](https://github.com/Treeki/Kamek).
 
@@ -111,30 +111,27 @@ Also supports mapping addresses between any version pair, instead of just from p
 
 This uses [intervaltree](https://pypi.org/project/intervaltree/) for speedup if it's available, but also has fallback logic if it's not.
 
-### lib_demangle.py
+### demangle
 
-A simple frontend that wraps `lib_demangle_correct.py` and `lib_demangle_nvidia.py` with a single function and a parameter to choose between the two.
+Provides a function to demangle a CodeWarrior-mangled symbol.
 
-### lib_demangle_correct.py
+A boolean parameter lets you choose between two implementations:
 
-A correct (as far as we know) CodeWarrior symbol demangler, [from here](https://gist.github.com/aboood40091/8ce65132bf2c1abe426df91de994331d).
+- A correct (as far as we know) demangler, [from here](https://gist.github.com/aboood40091/8ce65132bf2c1abe426df91de994331d).
+- A bug-for-bug (as far as we know) reimplementation of the demangler used by Nvidia for ALF symbol tables, [from here](https://gist.github.com/RootCubed/9ebecf21eec344f10164cdfabbf0bb41).
 
-### lib_demangle_nvidia.py
-
-A bug-for-bug (as far as we know) reimplementation of the demangler used by Nvidia for ALF symbol tables, [from here](https://gist.github.com/RootCubed/9ebecf21eec344f10164cdfabbf0bb41).
-
-### lib_nsmbw.py
+### nsmbw
 
 A few utility functions specific to NSMBW, to try to at least keep the hardcoding mostly centralized. (Also see the next library below.)
 
-### lib_nsmbw_constants.py
+### nsmbw_constants
 
 A wide variety of constants specific to NSMBW, to try to at least keep the hardcoding mostly centralized. (Also see the previous library, above.)
 
-### lib_symbol_map_formats.py
+### symbol_map_formats
 
 An abstract `SymbolMap` class and a variety of subclasses representing various types of symbol map files.
 
-### lib_tweaks.py
+### tweaks
 
 Parser for "tweak map" files, which describe how the symbols in a symbol map change across versions (for example, a function which gained or lost a parameter in some game version).

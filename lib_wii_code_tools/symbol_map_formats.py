@@ -4,7 +4,7 @@ import json
 import re
 from typing import ClassVar, Dict, List, Optional, TextIO, Tuple
 
-from lib_nsmbw_constants import Permissions
+from .nsmbw_constants import Permissions
 
 
 KAMEK_LINKER_SCRIPT_EPILOGUE = """
@@ -43,7 +43,7 @@ def _categorize_symbols_as_functions_or_labels(map: BasicSymbolMap, sections_inf
     sections_info: list of dicts (one per section) containing keys:
     - 'address' (int)
     - 'size' (int)
-    - 'permissions' (lib_nsmbw_constants.Permissions)
+    - 'permissions' (nsmbw_constants.Permissions)
     Returns two maps: the function symbols, and the label symbols.
     """
     executable_regions = set()
@@ -369,7 +369,7 @@ class IDASymbolMap_IDC(SymbolMap):
         sections_info: list of dicts (one per section) containing keys:
         - 'address' (int)
         - 'size' (int)
-        - 'permissions' (lib_nsmbw_constants.Permissions)
+        - 'permissions' (nsmbw_constants.Permissions)
         """
         self = cls()
 
@@ -442,8 +442,6 @@ class GhidraSymbolsScript(SymbolMap):
             r'([lf])'            # "l"|"f"
         )
 
-        map = {}
-
         for line in f:
             line = line.rstrip('\n')
             if not line: continue
@@ -473,7 +471,7 @@ class GhidraSymbolsScript(SymbolMap):
         sections_info: list of dicts (one per section) containing keys:
         - 'address' (int)
         - 'size' (int)
-        - 'permissions' (lib_nsmbw_constants.Permissions)
+        - 'permissions' (nsmbw_constants.Permissions)
         """
         self = cls()
 
@@ -784,7 +782,7 @@ def add_map_output_arguments(parser: 'argparse.ArgumentParser', base_name, *args
         We can't use "type=" instead, because that's applied *before*
         the value is compared against "choices", resulting in stuff like
         "invalid choice: <class
-          'lib_symbol_map_formats.GhidraSymbolsScript'> (choose from
+          'symbol_map_formats.GhidraSymbolsScript'> (choose from
           'dolphin', 'ghidra', 'ida', 'idc', 'json', 'linker')"
         """
         def __call__(self, parser, namespace, values, option_string):

@@ -4,10 +4,10 @@ import argparse
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import code_files
-import code_files.all
-import lib_nsmbw
-import lib_symbol_map_formats
+from lib_wii_code_tools import code_files
+from lib_wii_code_tools.code_files import all as code_files_all
+from lib_wii_code_tools import nsmbw as lib_nsmbw
+from lib_wii_code_tools import symbol_map_formats as lib_symbol_map_formats
 
 
 
@@ -62,7 +62,7 @@ def main(args: Optional[List[str]] = None) -> None:
 
     parsed_args = parser.parse_args(args)
 
-    code_file = code_files.all.load_by_extension(parsed_args.code_file.read_bytes(), parsed_args.code_file.suffix)
+    code_file = code_files_all.load_by_extension(parsed_args.code_file.read_bytes(), parsed_args.code_file.suffix)
 
     if parsed_args.code_file.suffix == '.rel':
         if parsed_args.section_addresses is None:

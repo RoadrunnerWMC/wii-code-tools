@@ -30,8 +30,8 @@ import json
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import common
-import lib_address_maps
+from lib_wii_code_tools import common
+from lib_wii_code_tools import address_maps as lib_address_maps
 
 
 DEFAULT_ALIGNED_RANGE_START = 0x80000000

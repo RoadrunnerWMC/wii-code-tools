@@ -1,5 +1,5 @@
-import lib_demangle_correct
-import lib_demangle_nvidia
+from . import correct as lib_correct
+from . import nvidia as lib_nvidia
 
 
 def demangle(sym: str, *, nvidia: bool = False) -> str:
@@ -8,6 +8,6 @@ def demangle(sym: str, *, nvidia: bool = False) -> str:
     correct algorithm.
     """
     if nvidia:
-        return lib_demangle_nvidia.demangle(sym)
+        return lib_nvidia.demangle(sym)
     else:
-        return lib_demangle_correct.demangle(sym)
+        return lib_correct.demangle(sym)

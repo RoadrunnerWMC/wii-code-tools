@@ -4,11 +4,11 @@ import argparse
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple
 
-import common
-import lib_tweaks
-import lib_address_maps
-import lib_nsmbw
-import lib_symbol_map_formats
+from lib_wii_code_tools import common
+from lib_wii_code_tools import tweaks as lib_tweaks
+from lib_wii_code_tools import address_maps as lib_address_maps
+from lib_wii_code_tools import nsmbw as lib_nsmbw
+from lib_wii_code_tools import symbol_map_formats as lib_symbol_map_formats
 import map_address
 
 

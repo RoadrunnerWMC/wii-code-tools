@@ -5,14 +5,14 @@ from pathlib import Path
 import struct
 from typing import List, Optional
 
-import code_files.alf
-import lib_nsmbw
+from lib_wii_code_tools import nsmbw as lib_nsmbw
+from lib_wii_code_tools.code_files import alf as code_files_alf
 
 
 DOL_SECTION_ALIGNMENT = 0x20
 
 
-def alf_to_dol(alf: code_files.alf.ALF) -> bytes:
+def alf_to_dol(alf: code_files_alf.ALF) -> bytes:
     """
     Given an alf file, return data for an equivalent dol.
     Returns bytes instead of code_files.dol.DOL because the latter
@@ -24,7 +24,7 @@ def alf_to_dol(alf: code_files.alf.ALF) -> bytes:
     # Start the dol data with an empty header
     dol_data = bytearray(0x100)
 
-    def add_section(section: code_files.alf.ALFSection, index: int) -> None:
+    def add_section(section: code_files_alf.ALFSection, index: int) -> None:
         """
         Add the given section to the dol data, and put its info (offset,
         address, size) at the given index number in the header.
@@ -45,6 +45,8 @@ def alf_to_dol(alf: code_files.alf.ALF) -> bytes:
         struct.pack_into('>I', dol_data, 0x00 + index * 4, offset)
         struct.pack_into('>I', dol_data, 0x48 + index * 4, section.address)
         struct.pack_into('>I', dol_data, 0x90 + index * 4, section.size)
+
+    sorted_sections = sorted(alf.sections, key=lambda s: s.address)
 
     # Add executable sections
     text_section_num = 0
@@ -87,7 +89,7 @@ def main(args: Optional[List[str]] = None) -> None:
 
     parsed_args = parser.parse_args(args)
 
-    alf = code_files.alf.ALF(parsed_args.alf_file.read_bytes())
+    alf = code_files_alf.ALF(parsed_args.alf_file.read_bytes())
     dol_data = alf_to_dol(alf)
     parsed_args.dol_file.write_bytes(dol_data)
 
