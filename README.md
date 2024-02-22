@@ -79,7 +79,7 @@ Uses an address map to map a single address from one version to another. This is
 
 **Assumes NSMBW section names and executabilities**
 
-Uses an address map to port a symbol map from one game version to another, or to all other game versions at once.
+Uses an address map and optional tweak map to port a symbol map from one game version to another, or to all other game versions at once.
 
 ### static_linker.py
 
@@ -127,6 +127,10 @@ A few utility functions specific to NSMBW, to try to at least keep the hardcodin
 ### nsmbw_constants
 
 A wide variety of constants specific to NSMBW, to try to at least keep the hardcoding mostly centralized. (Also see the previous library, above.)
+
+### port_symbol_map
+
+Provides a function `remap_symbols_to_all_versions()` that uses an address map and optional tweak map to port a symbol map to all game versions.
 
 ### symbol_map_formats
 
