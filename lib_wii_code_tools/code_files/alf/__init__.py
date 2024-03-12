@@ -2,6 +2,7 @@
 # Based on Ninji's ALF loader for IDA
 
 import struct
+from typing import Optional
 
 from .. import CodeFile, CodeFileSection
 
@@ -21,12 +22,13 @@ class ALFSymbol:
     """
     Represents a symbol table entry from a .alf file
     """
-    def __init__(self, address: int, size: int, raw_name: str, demangled_name: str, is_data: bool):
+    def __init__(self, address: int, size: int, raw_name: str, demangled_name: str, is_data: bool, unk10: Optional[int] = None):
         self.address = address
         self.size = size
         self.raw_name = raw_name
         self.demangled_name = demangled_name
         self.is_data = is_data
+        self.unk10 = unk10
 
 
 class ALF(CodeFile):
@@ -56,7 +58,7 @@ class ALF(CodeFile):
             raise ValueError(f'ALF: Unlikely number of sections ({self.num_sections})')
 
         # Check version
-        if self.version != 104:
+        if self.version not in {104, 105}:
             raise ValueError(f'ALF: Unknown version ({self.version})')
 
         return 16
@@ -113,7 +115,13 @@ class ALF(CodeFile):
             address, size, is_data, section_id = struct.unpack_from('<4I', self.data, offs)
             offs += 16
 
-            symbol = ALFSymbol(address, size, raw_name, demangled_name, bool(is_data))
+            if self.version == 105:
+                unk10, = struct.unpack_from('<I', self.data, offs)
+                offs += 4
+            else:
+                unk10 = None
+
+            symbol = ALFSymbol(address, size, raw_name, demangled_name, bool(is_data), unk10)
 
             section = self.sections[section_id - 1]
             assert section.address <= address and address + size <= section.address + section.size

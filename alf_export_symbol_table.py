@@ -30,6 +30,8 @@ def main(args: Optional[List[str]] = None) -> None:
                     symbol.demangled_name,
                     'data' if symbol.is_data else 'code',
                 ]
+                if symbol.unk10 is not None:
+                    line_contents.append(str(symbol.unk10))
                 f.write(' '.join(line_contents) + '\n')
 
 
