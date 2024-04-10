@@ -120,6 +120,14 @@ A boolean parameter lets you choose between two implementations:
 - A correct (as far as we know) demangler, [from here](https://gist.github.com/aboood40091/8ce65132bf2c1abe426df91de994331d).
 - A bug-for-bug (as far as we know) reimplementation of the demangler used by Nvidia for ALF symbol tables, [from here](https://gist.github.com/RootCubed/9ebecf21eec344f10164cdfabbf0bb41).
 
+### mangle
+
+Provides a function to mangle a symbol, with CodeWarrior's mangling scheme.
+
+It's taken from [here](https://gist.github.com/CLF78/3b1cf5d863918e07352d9c63548cb5b6). Arrays and non-function symbols are not yet supported.
+
+The `is_remangle_mode` parameter indicates whether the input is a demangled symbol (i.e. doesn't include argument names and a return type) or a declaration as would be written in C++ source code (i.e. does include those).
+
 ### nsmbw
 
 A few utility functions specific to NSMBW, to try to at least keep the hardcoding mostly centralized. (Also see the next library below.)
