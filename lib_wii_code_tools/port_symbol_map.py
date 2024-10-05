@@ -116,7 +116,10 @@ def remap_symbols_one_level(
 
             name = new_name
 
-        remapped[remapped_addr] = name
+        if remapped_addr in remapped:
+            error_list.append(f'multiple symbols map to {remapped_addr:08X}: "{remapped[remapped_addr]}", "{name}"')
+        else:
+            remapped[remapped_addr] = name
 
     # Add new symbols
     for addr, name in additions.items():
