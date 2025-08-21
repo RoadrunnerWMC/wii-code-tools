@@ -1,8 +1,8 @@
 import enum
 
 
-VERSION_NAMES = ['P1', 'E1', 'J1', 'P2', 'E2', 'J2', 'P3', 'J3', 'K', 'W', 'C']
-VERSION_NAMES_NO_ESHOP = ['P1', 'E1', 'J1', 'P2', 'E2', 'J2', 'K', 'W', 'C']
+VERSION_NAMES = ['P1', 'E1', 'J1', 'JD', 'P2', 'E2', 'J2', 'P3', 'J3', 'K', 'W', 'C']
+VERSION_NAMES_NO_ESHOP = ['P1', 'E1', 'J1', 'JD', 'P2', 'E2', 'J2', 'K', 'W', 'C']
 
 REL_NAMES = [
     'd_profileNP',
@@ -15,6 +15,7 @@ CODE_FILE_NAMES = {
     'P1': 'main.dol',
     'E1': 'main.dol',
     'J1': 'main.dol',
+    'JD': 'main.dol',
     'P2': 'main.dol',
     'E2': 'main.dol',
     'J2': 'main.dol',
@@ -171,6 +172,55 @@ SECTION_ADDRESSES = {
             '.data': (0x80b733b8, 0x21f0),
             '.rodata': (0x80b755a8, 0x13520),
             '.bss': (0x80b893a0, 0x487c),
+        },
+    },
+    'JD': {
+        'main': {
+            '.init': (0x80004000, 0x26c0),
+            'extab': (0x800066c0, 0x60),
+            'extabindex': (0x80006720, 0x60),
+            '.text': (0x80006780, 0x2e4d20),
+            '.ctors': (0x802eb4a0, 0x2e0),
+            '.dtors': (0x802eb780, 0x20),
+            '.rodata': (0x802eb7a0, 0x106c0),
+            '.data': (0x802fbe60, 0x534e0),
+            '.bss': (0x8034f380, 0xcad80),
+            '.sdata': (0x8041a100, 0x24a0),
+            '.sbss': (0x8041c5a0, 0x14a0),
+            '.sdata2': (0x8041da40, 0x4b20),
+            '.sbss2': (0x80422560, 0x54),
+        },
+        'd_profileNP': {
+            '.text': (0x807685e0, 0x1fb8),
+            '.ctors': (0x8076a598, 0x8),
+            '.dtors': (0x8076a5a0, 0xc),
+            '.data': (0x8076a5b0, 0x1d8),
+            '.rodata': (0x8076a788, 0x1614),
+            '.bss': (0x8076d4a0, 0x208),
+        },
+        'd_basesNP': {
+            '.text': (0x8076d7b0, 0x1c5964),
+            '.ctors': (0x80933114, 0x4fc),
+            '.dtors': (0x80933610, 0xc),
+            '.data': (0x80933620, 0xa654),
+            '.rodata': (0x8093dc78, 0x51aa0),
+            '.bss': (0x80990000, 0x12484),
+        },
+        'd_enemiesNP': {
+            '.text': (0x809a2590, 0x12a428),
+            '.ctors': (0x80acc9b8, 0x28c),
+            '.dtors': (0x80accc44, 0xc),
+            '.data': (0x80accc50, 0x8610),
+            '.rodata': (0x80ad5260, 0x3b678),
+            '.bss': (0x80b10c20, 0xb4e0),
+        },
+        'd_en_bossNP': {
+            '.text': (0x80b1c210, 0x5702c),
+            '.ctors': (0x80b7323c, 0x6c),
+            '.dtors': (0x80b732a8, 0xc),
+            '.data': (0x80b732b8, 0x21f0),
+            '.rodata': (0x80b754a8, 0x13520),
+            '.bss': (0x80b892a0, 0x487c),
         },
     },
     'P2': {
@@ -476,6 +526,7 @@ R2_R13_VALUES = {
     'P1': (0x80433360, 0x8042f980),
     'E1': (0x80433080, 0x8042f680),
     'J1': (0x80432da0, 0x8042f400),
+    'JD': (0x80425a40, 0x80422100),
     'P2': (0x80433360, 0x8042f980),
     'E2': (0x80433080, 0x8042f680),
     'J2': (0x80432da0, 0x8042f400),
