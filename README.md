@@ -36,9 +36,19 @@ ALF hashes have the interesting property that if you know the hash of an unknown
 
 This script implements that. It takes the ALF hash value (hexadecimal number) of an unknown string, and a string which you think is a suffix of it, and "undoes" the suffix from the hash value. If the string isn't actually a suffix of the hash you provided, the output value will be meaningless.
 
+### auto_align_by_data.py
+
+This tool automatically generates an approximate address map (only intended as a guide for manual use -- doesn't perfectly conform to actual address-map syntax) between two provided code files. Since this script works by comparing the data of various sections, .bss sections can't be checked -- see auto_align_by_xrefs.py for a solution for that.
+
+The addresses won't be very precise, and it may give weird output in some places, but the output is only intended to be used as a rough guide to help you make a proper address map manually, anyway. You can usually ignore small matched areas with weird/unexpected offsets, and focus on the larger ones with offsets that make more sense. The lower address of each range is meaningful, but the upper address isn't (it's just the next range's lower address minus 1).
+
+Since this script involves comparing *random* snippets of data between the two files to help line them up, the output may vary somewhat each time you run it.
+
+Be patient -- this script takes about 3 minutes to run for NSMBW on my machine.
+
 ### auto_align_by_xrefs.py
 
-This tool is intended to help with creating address maps. It's particularly useful for .bss sections.
+This tool is intended to help with creating address maps. It's particularly useful for .bss sections. It only works if you already have an address map that's at least partially finished, ideally covering all of .text at minimum.
 
 This script provides a small Ghidra plugin in a comment at the top of the file, which exports all cross-reference information from a database to a JSON file. Run the plugin on (ideally brand-new, so they're easy to compare) databases for two game versions you'd like to create a mapping for, to get two JSON files. Then this script will compare them and output a suggested approximate address map for the address range you specify. (Usually it's pretty accurate, but not always -- be sure to check the output by hand and adjust it if needed.)
 
