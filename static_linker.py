@@ -449,8 +449,8 @@ def main(args: Optional[List[str]] = None) -> None:
     dol = code_files_all.load_by_extension(parsed_args.main_code_file.read_bytes(), parsed_args.main_code_file.suffix)
 
     # Load rels and parse and assign addresses for their sections
+    rels = []
     if parsed_args.rel is not None:
-        rels = []
         for rel_fp, rel_addrs_str in parsed_args.rel:
             rel_fp = Path(rel_fp)
 
