@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import readline  # provides history and stuff for REPL
 from typing import List, Optional
 
 from lib_wii_code_tools.code_files.alf import hashes as alf_hashes
